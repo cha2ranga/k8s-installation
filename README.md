@@ -1,4 +1,4 @@
-# csc-k8s-install
+# K8s installation
 Rocky linux k8s installation
 
 1. Run script 01 to configure the prerequsites for the installation. 
