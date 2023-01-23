@@ -55,12 +55,14 @@ Once ssh-key is ready, you can copy the key to worker1 and worker2
 ssh-copy-id root@worker1
 ssh-copy-id root@worker2
 ```
-Now from the master node, you will be able to ssh into both worker nodes without a password. 
+Now from the master node, you can SSH into both worker nodes without a password. 
 
 
 
 
-## VM prepreration for k8s installation
+## RUN below 05 steps into all three VMs
+
+## 01 VM preparation for k8s installation
 
 Multiple parameters need to configure before we start k8s installation. Here we will use [@containerd](https://github.com/containerd/containerd) as a CRI.
 
@@ -73,18 +75,45 @@ Create a directory and download scripts
 
 ```bash
 cd ~ && mkdir k8s_installation && cd k8s_installation
+```
+```bash
 wget https://raw.githubusercontent.com/cha2ranga/k8s-installation/main/scripts/1_k8s_install_part1.bash
 wget https://raw.githubusercontent.com/cha2ranga/k8s-installation/main/scripts/2_k8s_install_part2.bash
+```
+```bash
 chmode +x 1_k8s_install_part1.bash
 chmode +x 2_k8s_install_part2.bash
 ```
 
-## Run Script 1_k8s_install_part1.bash
 
-## Manually configure containerd settings
-Change the value of cgroup driver "SystemdCgroup = false" to "SystemdCgroup = true". This setting will enable the systemd cgroup driver for the containerd container runtime.
+## 02 - Run Script 1_k8s_install_part1.bash
+Script1 will adjust/install firewall, addtional kernel moduels, Container run time [@containerd](https://github.com/containerd/containerd) etc. 
+```bash
+./1_k8s_install_part1.bash
+```
+## 03 - Manually configure containerd settings
+Change the value of cgroup driver "SystemdCgroup = false" to "SystemdCgroup = true". This will enable the systemd cgroup driver for the containerd container runtime.
 ```bash
 vim /etc/containerd/config.toml
 ```
 ![containerd configuration](https://github.com/cha2ranga/k8s-installation/blob/main/images/containerd1.jpg)
+
+
+## 04 - Run Script 2_k8s_install_part2.bash
+Scrip2 will install/configure kubelet, kubeadm, kubectl, and additional packages like multipath. 
+```bash
+./2_k8s_install_part2.bash
+```
+
+## 05 - Configure socket path for containerd
+once you properly configure the container socket path, you can list down containers in the individual node. 
+
+```bash
+crictl config runtime-endpoint unix:///run/containerd/containerd.sock
+```
+
+## Now, prerequisites are completed. 
+Let's create a kubernetes cluster using [@kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) tool.
+
+
 
