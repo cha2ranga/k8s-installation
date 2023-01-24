@@ -200,7 +200,7 @@ ipaddresspool.metallb.io/first-pool created
 Verify load balancer IP pool
 
 ```bash
-k -n metallb-system get ipaddresspools.metallb.io
+kubectl -n metallb-system get ipaddresspools.metallb.io
 NAME         AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
 first-pool   true          false             ["172.27.1.60-172.27.1.69"]
 ```
