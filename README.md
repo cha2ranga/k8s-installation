@@ -1,4 +1,5 @@
-Rocky Linux - K8s Installation
+This README document provides instructions on manually setting up a Kubernetes cluster. The article will also cover how to use MetalLB for load balancing and the Kubernetes Dashboard for monitoring and managing the cluster. The goal is to give readers a basic understanding of Kubernetes and the tools to create their playground for testing and simulating scenarios.
+
 
 Create a Kubernetes cluster with [@Rocky Linux minimum](https://rockylinux.org/download) installation on the vsphere environment. 
 
