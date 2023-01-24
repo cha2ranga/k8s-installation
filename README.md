@@ -225,10 +225,8 @@ spec:
 Let's advertise IP range
 ```bash
 kubectl create -f l2adv.yml
-```
-output:
-
 l2advertisement.metallb.io/example created
+```
 
 verify advertised ip pool
 
