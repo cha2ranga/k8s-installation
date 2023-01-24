@@ -158,3 +158,150 @@ kubeadm token create --print-join-command
 ```
  
 Go to each worker node and join them to cluster
+
+
+## Metallb Installation
+
+Here we are going to use Metallb as a L2 mode. 
+metallb iprange 172.27.1.60-172.27.1.69
+
+Refer to this URL for [@metallb manifest](https://metallb.universe.tf/installation/) installation. 
+
+apply the manifest by,
+```bash
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+```
+Manifest will create a "metallb-system" namespace
+
+Now you can refer to [@L2 configuration](https://metallb.universe.tf/configuration/_advanced_ipaddresspool_config/)
+
+First, create an ip address pool for your load balancer. Add the below content to your l2ip_pool.yml file
+```bash
+touch l2ip_pool.yml
+```
+```bash
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: first-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.27.1.60-172.27.1.69
+```
+
+then create IP pool
+```bash
+kubectl apply -f l2ip_pool.yml
+
+```
+output:
+
+ipaddresspool.metallb.io/first-pool created
+
+
+Verify load balancer IP pool
+
+```bash
+k -n metallb-system get ipaddresspools.metallb.io
+```
+output:
+
+NAME         AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
+
+first-pool   true          false             ["172.27.1.60-172.27.1.69"]
+
+Let's advertise the ip pool. first create "l2adv.yml"
+
+```bash
+touch l2adv.yml
+```
+```bash
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - first-pool
+
+```
+
+Let's advertise IP range
+```bash
+kubectl create -f l2adv.yml
+```
+output:
+
+l2advertisement.metallb.io/example created
+
+verify advertised ip pool
+```bash
+kubectl -n metallb-system get l2advertisements.metallb.io
+```
+
+output:
+
+NAME      IPADDRESSPOOLS   IPADDRESSPOOL SELECTORS   INTERFACES
+
+example   ["first-pool"]
+
+
+Now you can change your sample deployment of the web application to load balancer
+```bash
+kubectl expose deployment web --port=80 --name=websvc --type=LoadBalancer
+```
+
+verify,
+
+k get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        19d
+
+websvc       LoadBalancer   10.111.84.155   172.27.1.60   80:32179/TCP   5s
+
+
+
+## Metric Server Installation
+
+The Kubernetes Metrics Server is a cluster-wide aggregator of resource usage data.
+
+Even though installation is simple, it usually will not work due to certificate and other configuration errors. There are additional parameters that need to add based on documentation.
+
+Here are the common challenges with [@Metrics-server](https://github.com/kubernetes-sigs/metrics-server/blob/master/KNOWN_ISSUES.md#kubelet-doesnt-report-pod-metrics) installation.
+
+1. create config map for "front-proxy" certificate
+```bash
+kubectl -n kube-system create configmap front-proxy-ca --from-file=front-proxy-ca.crt=/etc/kubernetes/pki/front-proxy-ca.crt -o yaml | kubectl -nkube-system replace configmap front-proxy-ca -f -
+```
+
+output:
+configmap/front-proxy-ca replaced
+
+verify,
+
+```bash
+kubectl -n kube-system get cm
+```
+
+2. Now you can apply the metrics-server manifest file
+```bash
+wget https://raw.githubusercontent.com/cha2ranga/k8s-installation/main/metrics-server/components_custom.yaml
+```
+
+```bash
+kubectl apply -f components_custom.yaml
+```
+
+3. now, you can run the following commands to verify the metrics server. Note: wait at least for 30 seconds 
+```bash
+kubectl top nodes
+```
+```bash
+kubectl top pods
+```
+
+
+
