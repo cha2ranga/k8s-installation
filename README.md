@@ -303,5 +303,182 @@ kubectl top nodes
 kubectl top pods
 ```
 
+![Metrics-server](https://github.com/cha2ranga/k8s-installation/blob/main/images/metricsserver1.jpg)
+
+
+## Kubernetes Dashboard Installation
+
+Let's enable [@kubernetes dashboard](https://github.com/kubernetes/dashboard) for our cluster. In this case, we will use a load balancer IP to publish the dashboard service via https. It is not recommended for a production installation. However, since this is a demo setup, we can still expose dashboard services over load balancer IPs. 
+
+![Dashboard](https://github.com/cha2ranga/k8s-installation/blob/main/images/dashboard1.jpg)
+
+You can add the following manifest file,
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+```
+
+you can list down the newly created pods under "kubernetes-dashboard"
+
+```bash
+kubectl -n kubernetes-dashboard get pods -o wide
+```
+
+by default kubernetes dashboard uses cluster ip for it's service. 
+```bash
+kubectl -n kubernetes-dashboard get svc
+NAME                        TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+kubernetes-dashboard   dashboard-metrics-scraper   ClusterIP      10.101.138.205   <none>        8000/TCP                 1m
+kubernetes-dashboard   kubernetes-dashboard        ClusterIP      10.97.185.20     <none>        443/TCP                  1m
+```
+
+Since we have configured metallb, we can use load balancer IP for Kubernetes dashboard.
+
+```bash
+kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard
+```
+
+set the parameters as follows,
+![Edit service](https://github.com/cha2ranga/k8s-installation/blob/main/images/dashboard2.jpg)
+
+After editing the file, you can write and exit from the file. 
+
+```bash
+:wq
+``` 
+
+Now you can verify the service status.
+
+```bash
+kubectl -n kubernetes-dashboard get svc
+```
+
+the output shows as follows,
+```bash
+NAME                        TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+dashboard-metrics-scraper   ClusterIP      10.101.138.205   <none>        8000/TCP        1h
+kubernetes-dashboard        LoadBalancer   10.97.143.73     172.27.1.61   443:31058/TCP   14s
+```
+
+Now we can access the services over the load balancer IP address, in this case https://172.27.1.61
+
+![Kubernetes Dashboard](https://github.com/cha2ranga/k8s-installation/blob/main/images/dashboard3.jpg)
+
+Instead of a kubeconfig file, we can create an admin and read-only users to access the Kubernetes dashboard
+
+Let's create a service account, cluster role, and cluster role binding. 
+
+```bash
+vim admin-user.yaml
+```
+Add the following settings to admin-user.yaml
+```bash
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+```
+
+create admin user,
+
+```bash
+kubectl apply -f admin-user.yaml
+```
+
+Run the following command to generate a token for the admin user
+```bash
+kubectl -n kubernetes-dashboard create token admin-user
+```
+
+Now you can use this token to authenticate to the kubernetes dashboard. 
+![Kubernetes Dashboard login](https://github.com/cha2ranga/k8s-installation/blob/main/images/dashboard4.jpg)
+
+
+Create read-only user
+
+```bash 
+vim read-only-user.yaml
+```
+
+```bash
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: read-only-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  labels:
+  name: read-only-clusterrole
+  namespace: default
+rules:
+- apiGroups:
+  - ""
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources: ["*"]
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-only-binding
+roleRef:
+  kind: ClusterRole
+  name: read-only-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: read-only-user
+  namespace: kubernetes-dashboard
+```
+
+```bash
+kubectl apply -f read-only-user.yaml
+```
+
+Run the following command to generate a token for read-only-user
+```bash
+kubectl -n kubernetes-dashboard create token read-only-user
+```
+
+example output
+```bash
+kubectl -n kubernetes-dashboard create token read-only-user
+eyJhbGciOiJSUzI1NiIsImtpZCIxxxxxxxxxxxxxxxI3j9cnqMfUbqHlELpFegaPw
+```
 
 
