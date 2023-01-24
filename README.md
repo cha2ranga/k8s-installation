@@ -176,6 +176,7 @@ Manifest will create a "metallb-system" namespace
 Now you can refer to [@L2 configuration](https://metallb.universe.tf/configuration/_advanced_ipaddresspool_config/)
 
 First, create an ip address pool for your load balancer. Add the below content to your l2ip_pool.yml file
+
 ```bash
 touch l2ip_pool.yml
 ```
@@ -190,26 +191,19 @@ spec:
   - 172.27.1.60-172.27.1.69
 ```
 
-then create IP pool
+then create the IP pool
 ```bash
 kubectl apply -f l2ip_pool.yml
-
-```
-output:
-
 ipaddresspool.metallb.io/first-pool created
-
+```
 
 Verify load balancer IP pool
 
 ```bash
 k -n metallb-system get ipaddresspools.metallb.io
-```
-output:
-
 NAME         AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
-
 first-pool   true          false             ["172.27.1.60-172.27.1.69"]
+```
 
 Let's advertise the ip pool. first create "l2adv.yml"
 
