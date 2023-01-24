@@ -239,13 +239,9 @@ l2advertisement.metallb.io/example created
 verify advertised ip pool
 ```bash
 kubectl -n metallb-system get l2advertisements.metallb.io
-```
-
-output:
-
 NAME      IPADDRESSPOOLS   IPADDRESSPOOL SELECTORS   INTERFACES
-
 example   ["first-pool"]
+```
 
 
 Now you can change your sample deployment of the web application to load balancer
@@ -254,14 +250,12 @@ kubectl expose deployment web --port=80 --name=websvc --type=LoadBalancer
 ```
 
 verify,
-
-k get svc
+```bash
+kubectl get svc
 NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-
 kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        19d
-
 websvc       LoadBalancer   10.111.84.155   172.27.1.60   80:32179/TCP   5s
-
+```
 
 
 ## Metric Server Installation
@@ -481,5 +475,4 @@ kubectl -n kubernetes-dashboard create token read-only-user
 eyJhbGciOiJSUzI1NiIsImtpZCIxxxxxxxxxxxxxxxI3j9cnqMfUbqHlELpFegaPw
 ```
 
-test1
-test2
+
