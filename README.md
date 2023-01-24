@@ -237,6 +237,7 @@ output:
 l2advertisement.metallb.io/example created
 
 verify advertised ip pool
+
 ```bash
 kubectl -n metallb-system get l2advertisements.metallb.io
 NAME      IPADDRESSPOOLS   IPADDRESSPOOL SELECTORS   INTERFACES
