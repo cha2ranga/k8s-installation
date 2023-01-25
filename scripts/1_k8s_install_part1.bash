@@ -1,3 +1,4 @@
+#!/bin/bash
 #SCRIPT
 ######################################################################
 ######################################################################
@@ -129,6 +130,24 @@ echo ""
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   SELINUX completed   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo ""
 
+# Change iscsi initiator name to proper hostname
+
+
+INITIATOR_FILE="/etc/iscsi/initiatorname.iscsi"
+
+if [ -f "$INITIATOR_FILE" ]; then
+    OLD_INITIATOR_NAME=$(cat $INITIATOR_FILE | awk -F ":" '{print $2}')
+    HOSTNAME=$(hostname)
+    sed -i "s/$OLD_INITIATOR_NAME/$HOSTNAME/g" $INITIATOR_FILE
+    echo "Initiator name changed from $OLD_INITIATOR_NAME to $HOSTNAME"
+else
+    echo "$INITIATOR_FILE not found"
+    exit 1
+fi
+
+echo ""
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   iscsiinitiator name changed   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo ""
 
 ############################################ DNF Config ####################################
 dnf install dnf-utils -y
