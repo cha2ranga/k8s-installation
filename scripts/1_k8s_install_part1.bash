@@ -190,11 +190,17 @@ rpm -qa |grep -i containerd
 
 
 # After install backup orginal config files
+
+echo ""
+echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!    Generate containerd default config  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+echo ""
+containerd config default > /etc/containerd/config.toml
+ls -l /etc/containerd/
+
 echo ""
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!    configure containerd parameters (SystemdCgroup = true)  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo ""
 
-containerd config default > /etc/containerd/config.toml
 sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.bak
 sudo awk '{sub(/SystemdCgroup = false/, "SystemdCgroup = true")}1' /etc/containerd/config.toml > tmp.toml && sudo mv tmp.toml /etc/containerd/config.toml
 grep 'SystemdCgroup' /etc/containerd/config.toml
