@@ -8,8 +8,8 @@
 
 ## Install packages
 
-yum install epel-release tree screen wget elinks bash-completion -y
-yum install yum-utils device-mapper-persistent-data lvm2  device-mapper-multipath iscsi-initiator-utils iscsi-initiator-utils-devel git bash-completion nfs-utils -y
+yum install epel-release tree screen wget elinks bash-completion yum-utils -y
+yum install device-mapper-persistent-data lvm2  device-mapper-multipath iscsi-initiator-utils iscsi-initiator-utils-devel git bash-completion nfs-utils -y
 
 
 
