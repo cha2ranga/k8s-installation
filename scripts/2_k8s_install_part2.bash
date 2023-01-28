@@ -2,9 +2,9 @@
 ##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$     Manual config     $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ##$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-echo ""
-echo "@@@@@@@@@@@@@@@@@@@@ Manually edit /etc/containerd/config.toml and set SystemdCgroup = True @@@@@@@@@@@"
-echo ""
+## echo ""
+## echo "@@@@@@@@@@@@@@@@@@@@ Manually edit /etc/containerd/config.toml and set SystemdCgroup = True @@@@@@@@@@@"
+## echo ""
 ### /etc/containerd/config.toml
 ###Change the value of cgroup driver "SystemdCgroup = false" to "SystemdCgroup = true". This will enable the systemd cgroup driver for the containerd container runtime.
 ##
@@ -14,15 +14,15 @@ echo ""
 ###        SystemdCgroup = true
 ##
 ##
-read -p "Do you want to proceed? (yes/no) " yn
+#read -p "Do you want to proceed? (yes/no) " yn
 
-case $yn in
-        yes ) echo ok, we will proceed;;
-        no ) echo exiting...;
-                exit;;
-        * ) echo invalid response;
-                exit 1;;
-esac
+##case $yn in
+##        yes ) echo ok, we will proceed;;
+##        no ) echo exiting...;
+##                exit;;
+##        * ) echo invalid response;
+##                exit 1;;
+##esac
 
 #### Enable containerd service
 echo ""
