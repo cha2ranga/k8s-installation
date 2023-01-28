@@ -89,8 +89,8 @@ wget https://raw.githubusercontent.com/cha2ranga/k8s-installation/main/scripts/1
 wget https://raw.githubusercontent.com/cha2ranga/k8s-installation/main/scripts/2_k8s_install_part2.bash
 ```
 ```bash
-chmode +x 1_k8s_install_part1.bash
-chmode +x 2_k8s_install_part2.bash
+chmod +x 1_k8s_install_part1.bash
+chmod +x 2_k8s_install_part2.bash
 ```
 
 
