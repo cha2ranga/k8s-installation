@@ -64,7 +64,7 @@ Now from master node you will be able to ssh into both worker nodes without pass
 
 ## 01 VM prepreration for k8s installation
 
-There are multiple parameter need to be configured before we start k8s installation. Here we are going to use [@containerd](https://github.com/containerd/containerd) as a CRI.
+There are multiple parameters need to be configured before we start k8s installation. Here we are going to use [@containerd](https://github.com/containerd/containerd) as a CRI.
 
 Rest of the prerequsites likes, swap configuration, addtional packages, firewall, addtional kernel modules will be configured using basic bash scripts. 
 
