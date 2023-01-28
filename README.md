@@ -35,7 +35,7 @@ yum install -y wget
 ```bash
 yum update -y && reboot
 ```
-Once nodes are back in online, setup /etc/hosts file as follows. If you have proper DNS in the environment feel free to follow 
+Once nodes are back in online, setup /etc/hosts file as follows. If you have a proper DNS in the environment feel free to follow 
 
 Since we are following non-production deployment add the host file entries. 
 ```bash
@@ -53,11 +53,16 @@ Configure ssh-key files
 ```bash
 ssh-keygen
 ```
+![Diagram1](https://github.com/cha2ranga/k8s-installation/blob/main/images/ssh1.jpg)
+
 Once key is ready you can copy the key to worker1 and worker2
 ```bash
 ssh-copy-id root@worker1
 ssh-copy-id root@worker2
 ```
+
+![Diagram1](https://github.com/cha2ranga/k8s-installation/blob/main/images/ssh2.jpg)
+
 Now from master node you will be able to ssh into both worker nodes without password. 
 
 
