@@ -29,11 +29,11 @@ Setup VMs with minimum installation (2vCPU, 4GB Memory, 30GB Disks)
 Once installation is finishd, setup static IPs (preffered) for all threee VMs. 
 Then upgrade the OS to latest patch versions for all three VMs. 
 ```bash
-  yum install -y wget
+yum install -y wget
 ```
 
 ```bash
-  yum update -y && reboot
+yum update -y && reboot
 ```
 Once nodes are back in online, setup /etc/hosts file as follows. If you have proper DNS in the environment feel free to follow 
 
