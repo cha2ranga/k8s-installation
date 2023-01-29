@@ -42,9 +42,9 @@ Since we are following non-production deployment add the host file entries.
  cat /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-172.27.3.101    master
-172.27.3.102    worker1
-172.27.3.103    worker2
+172.18.0.201    master
+172.18.0.202    worker1
+172.18.0.203    worker2
 ```
 
 ## Configure passwordless SSH
@@ -217,7 +217,7 @@ complete -o default -F __start_kubectl k
 ## Metallb Installation (LoadBalancer)
 
 Here we are going to use Metallb as a L2 mode. 
-metallb iprange 172.27.1.60-172.27.1.69
+metallb iprange 172.18.0.220-172.18.0.229
 
 Refer to this URL for [@metallb manifest](https://metallb.universe.tf/installation/) installation. 
 
@@ -242,7 +242,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 172.27.1.60-172.27.1.69
+  - 172.18.0.220-172.18.0.229
 ```
 
 then create the IP pool
@@ -256,7 +256,7 @@ Verify load balancer IP pool
 ```bash
 kubectl -n metallb-system get ipaddresspools.metallb.io
 NAME         AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
-first-pool   true          false             ["172.27.1.60-172.27.1.69"]
+first-pool   true          false             ["172.18.0.220-172.18.0.229"]
 ```
 
 Let's advertise the ip pool. first create "l2adv.yml"
@@ -290,6 +290,10 @@ NAME      IPADDRESSPOOLS   IPADDRESSPOOL SELECTORS   INTERFACES
 example   ["first-pool"]
 ```
 
+Create a quick nginx deployment with two replicas
+```bash
+kubectl create deployment web --image nginx --replicas=2
+ ```
 
 Now you can change your sample deployment of the web application to load balancer
 ```bash
@@ -299,9 +303,9 @@ kubectl expose deployment web --port=80 --name=websvc --type=LoadBalancer
 verify,
 ```bash
 kubectl get svc
-NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        19d
-websvc       LoadBalancer   10.111.84.155   172.27.1.60   80:32179/TCP   5s
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)        AGE
+kubernetes   ClusterIP      10.96.0.1        <none>         443/TCP        143m
+websvc       LoadBalancer   10.100.238.200   172.18.0.220   80:30427/TCP   8s
 ```
 
 
