@@ -70,7 +70,7 @@ Now from master node you will be able to ssh into both worker nodes without pass
 
 ## RUN below 04 stpes into all three VMs
 
-## 01 VM prepreration for k8s installation
+## 01 - VM prepreration for k8s installation
 
 There are multiple parameters need to be configured before we start k8s installation. Here we are going to use [@containerd](https://github.com/containerd/containerd) as a CRI.
 
@@ -132,6 +132,13 @@ we are going to use following ip cidr for container network
 kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
 ![kubeadm init](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm1.jpg)
+
+If you open another ssh session to your master node and try to list down running containers, you see the initial container creation
+
+``` bash
+watch -n 1 crictl ps
+```
+![containers](https://github.com/cha2ranga/k8s-installation/blob/main/images/containerd2.jpg)
 
 Copy kubernetes config file to .kube directory
 ```bash
