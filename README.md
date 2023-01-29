@@ -48,7 +48,9 @@ Since we are following non-production deployment add the host file entries.
 ```
 
 ## Configure passwordless SSH
+
 Configure ssh-key files
+
 ### on master 
 ```bash
 ssh-keygen
