@@ -205,8 +205,16 @@ kubectl get nodes -o wide
 
 ![Calico](https://github.com/cha2ranga/k8s-installation/blob/main/images/nodes1.jpg)
 
+Use follwoing commands to set the autocompletion and set alias
 
-## Metallb Installation
+```bash
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+alias k=kubectl
+complete -o default -F __start_kubectl k
+```
+
+## Metallb Installation (LoadBalancer)
 
 Here we are going to use Metallb as a L2 mode. 
 metallb iprange 172.27.1.60-172.27.1.69
@@ -297,7 +305,7 @@ websvc       LoadBalancer   10.111.84.155   172.27.1.60   80:32179/TCP   5s
 ```
 
 
-## Metric Server Installation
+## Metric Server Installation 
 
 The Kubernetes Metrics Server is a cluster-wide aggregator of resource usage data.
 
