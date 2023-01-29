@@ -131,15 +131,35 @@ we are going to use following ip cidr for container network
 ```bash
 kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
+![kubeadm init](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm1.jpg)
+
+Copy kubernetes config file to .kube directory
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+Alternative method is, you can export config file as follows
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+![kubeadm config](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm2.jpg)
+
 
 After kubeadm initialized the master nodes, you will see base containers are up and running in the master node. 
 ```bash
 crictl ps
 ```
+![containers](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm3.jpg)
 
 Now you can start enabling network communication for your container network plugin. Here we are using [@calico manifest](https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises) file. 
 
-Download the yaml file
+As explained in the "kubeadm init" output, now we need to apply CNI. Then join worker nodes to the cluster using join token. 
+
+![containers](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm4.jpg)
+
+Download the yaml file for calico CNI
 
 ```bash
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
