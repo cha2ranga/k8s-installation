@@ -20,6 +20,7 @@ yum install device-mapper-persistent-data lvm2  device-mapper-multipath iscsi-in
 
 #iscsi-initiator-utils-devel
 systemctl enable iscsid.service
+systemctl start iscsid.service
 systemctl status iscsid.service
 
 
