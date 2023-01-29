@@ -176,7 +176,7 @@ then apply CNI
 ```bash
 kubectl apply -f calico.yaml
 ```
-
+![Calico](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm5.jpg)
 
 
 ## Join Worker Nodes to cluster
@@ -193,6 +193,17 @@ kubeadm token create --print-join-command
 ```
  
 Go to each worker node and join them to cluster
+
+![Calico](https://github.com/cha2ranga/k8s-installation/blob/main/images/worker1.jpg)
+
+Now you can go back to master node and check the status
+
+```bash
+kubectl get nodes
+kubectl get nodes -o wide
+```
+
+![Calico](https://github.com/cha2ranga/k8s-installation/blob/main/images/nodes1.jpg)
 
 
 ## Metallb Installation
