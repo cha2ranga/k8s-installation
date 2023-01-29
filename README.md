@@ -20,7 +20,7 @@ Storage - CSI (Container Storage Interface) [@Dell PowerStore](https://github.co
 
 ## Network Diagram
 
-![Diagram1](https://github.com/cha2ranga/k8s-installation/blob/main/images/diagram1.jpg)
+![Diagram1](https://github.com/cha2ranga/k8s-installation/blob/main/images/ndiagram1.jpg)
 
 
 ## VMs Installation 
