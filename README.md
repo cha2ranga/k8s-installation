@@ -132,6 +132,14 @@ Let's create a kubernetes cluster using [@kubeadm](https://kubernetes.io/docs/se
 we are going to use following ip cidr for container network
 10.244.0.0/16
 
+It's always better to perform a dry run before actual kubeadm init process. 
+you can do the dry run as follows,
+```bash
+kubeadm init --pod-network-cidr=10.244.0.0/16 --dry-run
+```
+![kubeadm dryrun](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadmdryrun.jpg)
+
+Once you verify there is no errors, you can do the "kubeadm init"
 ```bash
 kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
