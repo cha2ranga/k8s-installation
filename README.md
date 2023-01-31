@@ -181,7 +181,7 @@ kubectl apply -f calico.yaml
 ![Calico](https://github.com/cha2ranga/k8s-installation/blob/main/images/kubeadm5.jpg)
 
 
-## Join Worker Nodes to cluster
+## Join Worker Nodes to cluster (Run on worker nodes)
 Get the token and use this token to join rest of the worker nodes to cluster. 
 
 ```bash
