@@ -10,7 +10,7 @@
 
 yum install epel-release -y
 yum repolist
-yum install tree screen wget bash-completion yum-utils vim -y
+yum install tree screen wget bash-completion tar yum-utils vim -y
 
 echo ""
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Extra repo added !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
