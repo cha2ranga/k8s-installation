@@ -181,7 +181,7 @@ As explained in the "kubeadm init" output, now we need to apply CNI. Then join w
 Download the yaml file for calico CNI
 
 ```bash
-curl https://docs.projectcalico.org/manifests/calico.yaml -O
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/calico.yaml -O
 ```
 
 then apply CNI
